@@ -3,14 +3,14 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 
 import { IModule } from 'shared/types/app';
 
-import { OrderForm } from './view';
+import { Domain } from './view';
 
-const OrderFormModule: IModule = {
+const DomainModule: IModule = {
   getRoutes() {
     return (
       <Route key="orderForm" path={'/order'}>
         <Switch>
-          <Route path={'/order'} component={OrderForm} />
+          <Route path={'/order'} component={Domain} />
           <Redirect to={'/order'} />
         </Switch>
       </Route>
@@ -18,4 +18,4 @@ const OrderFormModule: IModule = {
   },
 };
 
-export default OrderFormModule;
+export default DomainModule;

@@ -1,7 +1,7 @@
 const commonPaths = require('./common-paths');
-
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 
 const config = {
   resolve: {
@@ -17,14 +17,23 @@ const config = {
       {
         test: /\.(js)$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [
+                ['import', { libraryName: "antd", style: true }]
+              ]
+            },
+        }],
+       
       },
       {
-        test: /\.(ts|tsx)$/,
-        use: [
-          'awesome-typescript-loader',
-          'tslint-loader',
-        ],
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+        }
       },
       {
         test: /\.scss$/,
@@ -48,31 +57,32 @@ const config = {
           },
         ],
       },
-    ]
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        },
-        vendor: {
-          chunks: 'initial',
-          test: 'vendor',
-          name: 'vendor',
-          enforce: true
-        }
+      {
+
+        test: /\.less$/,
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"},
+          {loader: "less-loader",
+          options: {
+            javascriptEnabled: true
+          }
+          }
+        ]
+
       }
-    }
+
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: `public/index.html`,
       favicon: `public/favicon.ico`
-    })
+    }),
+    new ForkTsCheckerWebpackPlugin({
+        tsconfig: commonPaths.tsconfig,
+        tslint: commonPaths.tslint,
+      })
   ]
 };
 

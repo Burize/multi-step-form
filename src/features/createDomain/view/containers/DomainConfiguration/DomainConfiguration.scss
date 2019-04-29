@@ -1,0 +1,12 @@
+.domain-configuration {
+  &__field{
+    margin-bottom: 1rem;
+    transition: max-height 0.7s;
+    max-height: 40px;
+    overflow: hidden;
+
+    &_hidden {
+      max-height: 0;
+    }
+  }
+}

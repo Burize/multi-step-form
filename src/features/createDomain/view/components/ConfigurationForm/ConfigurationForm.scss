@@ -1,0 +1,17 @@
+.configuration-form {
+  display: flex;
+  padding: 2rem;
+  justify-content: space-around;
+
+  &__form {
+    flex-shrink: 1;
+    flex-grow: 2;
+    max-width: 600px;
+  }
+
+  &__result-view {
+    flex-shrink: 2;
+    flex-grow: 1;
+    max-width: 350px;
+  }
+}

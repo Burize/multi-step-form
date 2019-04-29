@@ -1,0 +1,9 @@
+.layout {
+  // align-items: center
+
+  &__content {
+    align-self: center;
+    max-width: 1200px;
+    width: 100%;
+  }
+}

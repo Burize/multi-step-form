@@ -1,1 +1,1 @@
-export { default as OrderForm } from './OrderForm/OrderForm';
+export { default as DomainModule } from './Domain/Domain';
