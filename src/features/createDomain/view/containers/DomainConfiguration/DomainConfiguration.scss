@@ -23,6 +23,9 @@
 
     &_with_label {
       display: flex;
+      .ant-form-item-control-wrapper {
+        flex-grow: 1;
+      }
     }
   }
 

@@ -16,7 +16,12 @@ const b = block('overview');
 
 class Overview extends React.PureComponent<IProps, {}> {
   public render() {
-    const { values: { domain, postfix, country, cpuCores, cpuFrequency, ram, driveType, driveSpace, os } } = this.props;
+    const { values: {
+      domain, postfix, country, cpuCores, cpuFrequency, ram,
+      driveType, driveSpace, os, leasePeriod, activeAt },
+    } = this.props;
+
+    console.log('activeAt', activeAt);
     return (
       <div className={b()}>
         <h1 className={b('domain')}>{`${domain}.${postfix === 'national' ? country : postfix}`}</h1>
@@ -34,6 +39,14 @@ class Overview extends React.PureComponent<IProps, {}> {
           </div>
           <div className={b('value')}>
             {osTypes[os]}
+          </div>
+        </div>
+        <div className={b('row')}>
+          <div className={b('value')}>
+            {leasePeriod}
+          </div>
+          <div className={b('value')}>
+            {activeAt && activeAt.format('MMMM Do YYYY')}
           </div>
         </div>
         <Button htmlType="submit" size="large">accept</Button>

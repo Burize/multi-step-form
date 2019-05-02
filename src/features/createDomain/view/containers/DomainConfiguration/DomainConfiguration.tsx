@@ -1,14 +1,19 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { isRequired } from 'shared/helpers/forms/validations';
-import { TextInputField, SelectField, TextAreaField, NumberInputField, SliderField } from 'shared/view/form';
+import { isRequired, validateEmail } from 'shared/helpers/forms/validations';
+import { makePhoneNormalizer } from 'shared/helpers/forms/normalizes';
+import {
+  TextInputField, SelectField, TextAreaField, NumberInputField, SliderField, DatePickerField, CheckboxField,
+} from 'shared/view/form';
 
 import { ConfigurationForm, Overview } from '../../components';
 import { IFormData, DriveType } from '../../../namespace';
-import { postfixOptions, countryOptions, driveOptions, osOptions } from '../../../constants';
+import { postfixOptions, countryOptions, driveOptions, osOptions, phonePattern } from '../../../constants';
 
 import './DomainConfiguration.scss';
+
+const normalizePhone = makePhoneNormalizer(phonePattern);
 
 const ramLimitation = {
   min: 1,
@@ -29,6 +34,12 @@ function driverSpaceLimitations(driveType: DriveType) {
   };
 }
 
+const leasePeriodLimitation = {
+  min: 1,
+  max: 12,
+};
+const leasePeriodFormatter = (value?: number) => `${value} month${value && value > 1 ? 's' : ''}`;
+
 const initialValues: IFormData = {
   domain: '',
   postfix: 'com',
@@ -40,6 +51,11 @@ const initialValues: IFormData = {
   driveType: 'hdd',
   driveSpace: 512,
   os: 'linux',
+  email: '',
+  phone: '',
+  leasePeriod: 3,
+  activeAt: null,
+  agreement: false,
 };
 
 const formNames: { [key in keyof IFormData]: key } = {
@@ -53,6 +69,11 @@ const formNames: { [key in keyof IFormData]: key } = {
   driveType: 'driveType',
   driveSpace: 'driveSpace',
   os: 'os',
+  email: 'email',
+  phone: 'phone',
+  leasePeriod: 'leasePeriod',
+  activeAt: 'activeAt',
+  agreement: 'agreement',
 };
 
 const b = block('domain-configuration');
@@ -93,6 +114,7 @@ class DomainConfiguration extends React.PureComponent {
               name={formNames.additionalInfo}
               placeholder="some description here"
               autosize={{ minRows: 8, maxRows: 8 }}
+              label="Purpose of use"
             />
           </ConfigurationForm.Step>
           <ConfigurationForm.Step>
@@ -162,6 +184,46 @@ class DomainConfiguration extends React.PureComponent {
                 options={osOptions}
               />
             </div>
+          </ConfigurationForm.Step>
+          <ConfigurationForm.Step>
+            <TextInputField
+              className={b('field', { with: 'label' }).toString()}
+              name={formNames.email}
+              validate={validateEmail}
+              placeholder="your@email.com"
+              label="Email"
+            />
+            <TextInputField
+              className={b('field', { with: 'label' }).toString()}
+              name={formNames.phone}
+              parse={normalizePhone}
+              label="Phone"
+            />
+            <div className={b('group')}>
+              <NumberInputField
+                className={b('field', { with: 'label' }).toString()}
+                name={formNames.leasePeriod}
+                label="Lease period"
+                formatter={leasePeriodFormatter}
+                colon={false}
+                {...leasePeriodLimitation}
+              />
+              <SliderField
+                name={formNames.leasePeriod}
+                wrapperCol={{ span: 14 }}
+                {...leasePeriodLimitation}
+              />
+            </div>
+            <DatePickerField
+              className={b('field', { with: 'label' }).toString()}
+              name={formNames.activeAt}
+              label="Activate at"
+            />
+            <CheckboxField
+              className={b('field', { with: 'label' }).toString()}
+              name={formNames.agreement}
+              label="Accept all conditions"
+            />
           </ConfigurationForm.Step>
         </ConfigurationForm>
       </div>

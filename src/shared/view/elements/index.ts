@@ -7,3 +7,5 @@ export { default as NumberInput } from './NumberInput/NumberInput';
 export { default as Select } from './Select/Select';
 export { default as TextArea } from './TextArea/TextArea';
 export { default as Slider } from './Slider/Slider';
+export { default as DatePicker } from './DatePicker/DatePicker';
+export { default as Checkbox } from './Checkbox/Checkbox';

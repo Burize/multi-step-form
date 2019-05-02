@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export interface IFormData {
   domain: string;
   postfix: Postfix;
@@ -9,6 +11,11 @@ export interface IFormData {
   driveType: DriveType;
   driveSpace: number;
   os: OSType;
+  email: string;
+  phone: string;
+  leasePeriod: number;
+  activeAt: Moment | null;
+  agreement: boolean;
 }
 
 export type Postfix = 'national' | 'io' | 'com';

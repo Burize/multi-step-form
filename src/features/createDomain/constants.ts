@@ -28,3 +28,5 @@ export const osOptions: Array<IOption<OSType>> = [
   { value: 'window', label: osTypes.window },
   { value: 'mac', label: osTypes.mac },
 ];
+
+export const phonePattern = '(999)-999-9999';
