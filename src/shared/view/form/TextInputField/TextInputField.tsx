@@ -8,9 +8,9 @@ import { GetProps } from 'shared/types/utils';
 type IProps = GetProps<typeof TextInput> & FieldRenderProps<HTMLInputElement>;
 
 function TextInputField(props: IProps) {
-  const { input, meta: { invalid }, ...rest } = props;
+  const { input, meta: { error, touched }, ...rest } = props;
   return (
-    <TextInput validateStatus={invalid ? 'error' : ''} {...rest} {...input} />
+    <TextInput help={touched && error} validateStatus={error && touched ? 'error' : ''} {...rest} {...input} />
   );
 }
 

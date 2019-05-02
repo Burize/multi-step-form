@@ -1,12 +1,35 @@
 .domain-configuration {
-  &__field{
-    margin-bottom: 1rem;
+  $root: &;
+
+  &__row {
+    display: flex;
+
+    #{$root}__field {
+      margin-right: 1rem;
+    }
+  }
+
+  &__field {
     transition: max-height 0.7s;
-    max-height: 40px;
     overflow: hidden;
 
-    &_hidden {
+    &_visibility_hidden {
       max-height: 0;
+    }
+
+    &_visibility_visible {
+      max-height: 60px;
+    }
+
+    &_with_label {
+      display: flex;
+    }
+  }
+
+  &__group {
+    .ant-form-item {
+      margin-bottom: 0.25rem;
+
     }
   }
 }

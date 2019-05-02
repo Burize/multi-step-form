@@ -1,12 +1,46 @@
 .configuration-form {
   display: flex;
-  padding: 2rem;
-  justify-content: space-around;
+  flex-direction: column;
+  padding-top: 2rem;
+
+  &__steps {
+    align-self: center;
+    width: 600px;
+    margin-bottom: 1rem;
+  }
 
   &__form {
+ 
+    display: flex;
+    padding: 2rem;
+    justify-content: space-around;
+  }
+
+  &__form-fields {
     flex-shrink: 1;
     flex-grow: 2;
-    max-width: 600px;
+    max-width: 500px;
+    height: 380px;
+    overflow: hidden;
+  }
+
+  &__fields-group{
+    height: 100%;
+    padding: 0.5rem;
+    transition: transform 1s ease-in-out;
+    &_step {
+      &_0 {
+        transform: translateY(0);
+      }
+
+      &_1 {
+        transform: translateY(-100%);
+      }
+
+      &_2 {
+        transform: translateY(-200%);
+      }
+    }
   }
 
   &__result-view {
