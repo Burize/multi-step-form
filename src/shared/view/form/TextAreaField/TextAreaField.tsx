@@ -8,9 +8,9 @@ import { GetProps } from 'shared/types/utils';
 type IProps = GetProps<typeof TextArea> & FieldRenderProps<HTMLTextAreaElement>;
 
 function TextAreaField(props: IProps) {
-  const { input, meta: { invalid }, ...rest } = props;
+  const { input, meta: { touched, error }, ...rest } = props;
   return (
-    <TextArea validateStatus={invalid ? 'error' : ''} {...rest} {...input} />
+    <TextArea help={touched && error} validateStatus={error && touched ? 'error' : ''} {...rest} {...input} />
   );
 }
 

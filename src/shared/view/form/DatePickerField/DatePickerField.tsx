@@ -11,10 +11,11 @@ type IProps = GetProps<typeof DatePicker> & {
 };
 
 function NumberInputField(props: IProps) {
-  const { input, meta: { invalid }, ...rest } = props;
+  const { input, meta: { submitFailed, error }, ...rest } = props;
   return (
     <DatePicker
-      validateStatus={invalid ? 'error' : ''}
+      help={submitFailed && error}
+      validateStatus={error && submitFailed ? 'error' : ''}
       {...rest}
       {...input}
       value={input.value ? input.value : undefined}

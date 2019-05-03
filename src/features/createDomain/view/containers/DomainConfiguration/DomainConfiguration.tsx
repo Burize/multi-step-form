@@ -78,22 +78,31 @@ const formNames: { [key in keyof IFormData]: key } = {
 
 const b = block('domain-configuration');
 
+function validateFields(values: IFormData): { [key in keyof IFormData]?: string } {
+  return {
+    [formNames.domain]: isRequired(values.domain),
+    [formNames.phone]: isRequired(values.phone),
+    [formNames.email]: isRequired(values.email) || validateEmail(values.email),
+    [formNames.activeAt]: isRequired(values.activeAt),
+  };
+}
+
 class DomainConfiguration extends React.PureComponent {
   public render() {
-    const { } = this.props;
     return (
       <div className={b()}>
         <ConfigurationForm<IFormData>
           initialValues={initialValues}
+          validateFields={validateFields}
         >
           <ConfigurationForm.Result<IFormData>>
-            {(values: IFormData, currentStep: number) => <Overview values={values} />}
+            {(values: IFormData, isInvalidValues: boolean, currentStep: number) => (
+              <Overview values={values} isInvalidValues={isInvalidValues} currentStep={currentStep} />)}
           </ConfigurationForm.Result>
           <ConfigurationForm.Step>
             <div className={b('field')}>
               <TextInputField
                 placeholder="domain@com"
-                validate={isRequired}
                 name={formNames.domain}
                 addonAfter={<SelectField name={formNames.postfix} options={postfixOptions} />}
               />
@@ -104,7 +113,6 @@ class DomainConfiguration extends React.PureComponent {
                   <SelectField
                     disabled={postfix !== 'national'}
                     placeholder="placeholder"
-                    validate={isRequired}
                     name={formNames.country}
                     options={countryOptions}
                   />
@@ -189,7 +197,6 @@ class DomainConfiguration extends React.PureComponent {
             <TextInputField
               className={b('field', { with: 'label' }).toString()}
               name={formNames.email}
-              validate={validateEmail}
               placeholder="your@email.com"
               label="Email"
             />

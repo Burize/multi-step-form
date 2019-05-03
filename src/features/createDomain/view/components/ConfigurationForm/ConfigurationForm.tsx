@@ -11,6 +11,7 @@ import './ConfigurationForm.scss';
 
 interface IProps<T> {
   initialValues: T;
+  validateFields?(values: T): { [key in keyof T]?: string };
 }
 
 interface IState {
@@ -27,7 +28,7 @@ interface IFieldsProps<T, F extends keyof T> {
 }
 
 interface IResultProps<P> {
-  children: (values: P, currentStep: number) => React.ReactNode;
+  children: (values: P, isInvalidValues: boolean, currentStep: number) => React.ReactNode;
 }
 const b = block('configuration-form');
 
@@ -42,9 +43,11 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
   public static Result = Result;
 
   public state: IState = { currentStep: 0 };
+  private isFirstStep: boolean = false;
+  private isLastStep: boolean = false;
 
   public render() {
-    const { children, initialValues } = this.props;
+    const { children, initialValues, validateFields: validateForm } = this.props;
 
     const childrenArray = React.Children.toArray(children) as React.ReactElement[];
     const steps: Array<React.ReactElement<IStepProps>> = childrenArray.
@@ -52,6 +55,9 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
     if (!steps) {
       return null;
     }
+
+    this.isFirstStep = this.state.currentStep === 0;
+    this.isLastStep = this.state.currentStep === steps.length - 1;
 
     const resultView: React.ReactElement<IResultProps<T>> | undefined =
       childrenArray.find(_children => _children.type === Result);
@@ -67,8 +73,9 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
         </div>
         <Form
           initialValues={initialValues}
+          validate={validateForm}
           onSubmit={this.handleSubmit}
-          subscription={{ submitting: true, pristine: true, values: true }}
+          subscription={{}}
         >
           {({ handleSubmit }) => (
             <form className={b('form')} onSubmit={handleSubmit}>
@@ -81,9 +88,9 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
               </div>
               {resultView &&
                 <div className={b('result-view')}>
-                  <FormSpy subscription={{ values: true }}>
-                    {({ values }: { values: T }) => (
-                      resultView.props.children(values, this.state.currentStep)
+                  <FormSpy subscription={{ values: true, invalid: true, submitFailed: true }}>
+                    {({ values, invalid, submitFailed }: { values: T, invalid: boolean, submitFailed: boolean }) => (
+                      resultView.props.children(values, invalid && submitFailed, this.state.currentStep)
                     )}
                   </FormSpy>
                 </div>}
@@ -92,8 +99,8 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
         </Form>
         <div className={b('step-toggles')}>
           <Button.Group>
-            <Button onClick={this.togglePrevStep}>prev</Button>
-            <Button onClick={this.toggleNextStep}>next</Button>
+            <Button onClick={this.togglePrevStep} disabled={this.isFirstStep}>prev</Button>
+            <Button onClick={this.toggleNextStep} disabled={this.isLastStep}>next</Button>
           </Button.Group>
         </div>
       </div>
@@ -102,12 +109,12 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
 
   @bind
   private togglePrevStep() {
-    this.setState(prevState => ({ currentStep: prevState.currentStep - 1 }));
+    !this.isFirstStep && this.setState(prevState => ({ currentStep: prevState.currentStep - 1 }));
   }
 
   @bind
   private toggleNextStep() {
-    this.setState(prevState => ({ currentStep: prevState.currentStep + 1 }));
+    !this.isLastStep && this.setState(prevState => ({ currentStep: prevState.currentStep + 1 }));
   }
 
   private renderStep(currentStep: React.ReactElement<IStepProps>) {

@@ -8,9 +8,9 @@ import { GetProps } from 'shared/types/utils';
 type IProps = GetProps<typeof Select> & FieldRenderProps<HTMLSelectElement>;
 
 function SelectField(props: IProps) {
-  const { input, meta: { invalid }, ...rest } = props;
+  const { input, meta: { touched, error }, ...rest } = props;
   return (
-    <Select validateStatus={invalid ? 'error' : ''} {...rest} {...input} />
+    <Select help={touched && error} validateStatus={error && touched ? 'error' : ''} {...rest} {...input} />
   );
 }
 
