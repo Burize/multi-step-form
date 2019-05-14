@@ -12,6 +12,7 @@ interface IProps {
   values: IFormData;
   isInvalidValues: boolean;
   currentStep: number;
+  error?: string;
 }
 
 const b = block('overview');
@@ -32,7 +33,7 @@ class Overview extends React.PureComponent<IProps, {}> {
         domain, postfix, country, cpuCores, cpuFrequency, ram,
         driveType, driveSpace, os, leasePeriod, activeAt, agreement,
       },
-      isInvalidValues: invalidValues,
+      isInvalidValues, error,
     } = this.props;
     const totalCost = getTotalCost({ cpuCores, cpuFrequency, ram, driveType, driveSpace, leasePeriod });
     return (
@@ -67,7 +68,8 @@ class Overview extends React.PureComponent<IProps, {}> {
             {`Total cost: ${totalCost}`}&#8381;
           </div>
         </div>
-        <Button htmlType="submit" block disabled={!agreement || invalidValues}>accept</Button>
+        <Button htmlType="submit" block disabled={!agreement || isInvalidValues}>accept</Button>
+        {error && <div className={b('error')}>{error}</div>}
       </div>
     );
   }

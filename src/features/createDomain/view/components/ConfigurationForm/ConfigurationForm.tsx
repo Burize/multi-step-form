@@ -12,6 +12,7 @@ import './ConfigurationForm.scss';
 interface IProps<T> {
   initialValues: T;
   validateFields?(values: T): { [key in keyof T]?: string };
+  onSubmit(values: T): void;
 }
 
 interface IState {
@@ -28,8 +29,29 @@ interface IFieldsProps<T, F extends keyof T> {
 }
 
 interface IResultProps<P> {
-  children: (values: P, isInvalidValues: boolean, currentStep: number) => React.ReactNode;
+  children: (values: P, isInvalidValues: boolean, currentStep: number, error?: string) => React.ReactNode;
 }
+
+interface IResultSpyProps<T> {
+  values: T;
+  hasValidationErrors: boolean;
+  hasSubmitErrors: boolean;
+  submitting: boolean;
+  submitFailed: boolean;
+  dirtySinceLastSubmit: boolean;
+  submitError?: string;
+}
+
+const IResultSpySubscription = {
+  values: true,
+  hasValidationErrors: true,
+  hasSubmitErrors: true,
+  submitting: true,
+  submitFailed: true,
+  dirtySinceLastSubmit: true,
+  submitError: true,
+};
+
 const b = block('configuration-form');
 
 class Step extends React.Component<IStepProps> { }
@@ -74,13 +96,12 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
         <Form
           initialValues={initialValues}
           validate={validateForm}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.props.onSubmit}
           subscription={{}}
         >
           {({ handleSubmit }) => (
             <form className={b('form')} onSubmit={handleSubmit}>
               <div className={b('form-fields')}>
-
                 {steps.map((step, i) => (
                   <div key={i} className={b('fields-group', { step: this.state.currentStep })}>
                     {this.renderStep(step)}
@@ -88,10 +109,14 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
               </div>
               {resultView &&
                 <div className={b('result-view')}>
-                  <FormSpy subscription={{ values: true, invalid: true, submitFailed: true }}>
-                    {({ values, invalid, submitFailed }: { values: T, invalid: boolean, submitFailed: boolean }) => (
-                      resultView.props.children(values, invalid && submitFailed, this.state.currentStep)
-                    )}
+                  <FormSpy subscription={IResultSpySubscription}>
+                    {(props: IResultSpyProps<T>) => (
+                    resultView.props.children(
+                        props.values,
+                        props.hasValidationErrors || (props.hasSubmitErrors && !props.dirtySinceLastSubmit),
+                        this.state.currentStep,
+                        props.submitError,
+                      ))}
                   </FormSpy>
                 </div>}
             </form>
@@ -122,13 +147,8 @@ class ConfigurationForm<T extends object> extends React.PureComponent<IProps<T>,
 
     const stepChildren = Array.isArray(children) ? children : [children];
 
-    return stepChildren.map(child => child.type !== Fields ? child :
-      <FormSpyFieldsValues fieldNames={child.props.fields} component={child.props.children} />);
-  }
-
-  @bind
-  private handleSubmit() {
-    console.log('handleSubmit');
+    return stepChildren.map((child, i) => child.type !== Fields ? child :
+      <FormSpyFieldsValues key={i} fieldNames={child.props.fields} component={child.props.children} />);
   }
 }
 

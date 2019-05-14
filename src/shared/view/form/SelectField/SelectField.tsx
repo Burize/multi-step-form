@@ -8,9 +8,16 @@ import { GetProps } from 'shared/types/utils';
 type IProps = GetProps<typeof Select> & FieldRenderProps<HTMLSelectElement>;
 
 function SelectField(props: IProps) {
-  const { input, meta: { touched, error }, ...rest } = props;
+  const { input, meta: { error, touched, submitError, dirtySinceLastSubmit }, ...rest } = props;
+  const submissionError = !dirtySinceLastSubmit && submitError;
+  const errorText = error || submissionError;
   return (
-    <Select help={touched && error} validateStatus={error && touched ? 'error' : ''} {...rest} {...input} />
+    <Select
+      help={touched && errorText}
+      validateStatus={touched && errorText ? 'error' : ''}
+      {...rest}
+      {...input}
+    />
   );
 }
 

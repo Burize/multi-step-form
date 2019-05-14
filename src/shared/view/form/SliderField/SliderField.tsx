@@ -11,9 +11,16 @@ type IProps = GetProps<typeof Slider> & {
 };
 
 function SliderField(props: IProps) {
-  const { input, meta: { touched, error }, ...rest } = props;
+  const { input, meta: { error, touched, submitError, dirtySinceLastSubmit }, ...rest } = props;
+  const submissionError = !dirtySinceLastSubmit && submitError;
+  const errorText = error || submissionError;
   return (
-    <Slider help={touched && error} validateStatus={error && touched ? 'error' : ''}{...rest} {...input} />
+    <Slider
+      help={touched && errorText}
+      validateStatus={touched && errorText ? 'error' : ''}
+      {...rest}
+      {...input}
+    />
   );
 }
 

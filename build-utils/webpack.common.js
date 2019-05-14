@@ -1,7 +1,12 @@
 const commonPaths = require('./common-paths');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const webpack = require('webpack');
 
+
+const envs = Object.entries(process.env).reduce(
+(acc, [name, value]) => ({ ...acc, [`process.env.${name}`]: JSON.stringify(value) }), {},
+);
 
 const config = {
   resolve: {
@@ -82,7 +87,10 @@ const config = {
     new ForkTsCheckerWebpackPlugin({
         tsconfig: commonPaths.tsconfig,
         tslint: commonPaths.tslint,
-      })
+      }),
+    new webpack.DefinePlugin({
+        ...envs,
+      }),
   ]
 };
 

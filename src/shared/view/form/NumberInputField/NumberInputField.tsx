@@ -11,9 +11,16 @@ type IProps = GetProps<typeof NumberInput> & {
 };
 
 function NumberInputField(props: IProps) {
-  const { input, meta: { touched, error }, ...rest } = props;
+  const { input, meta: { error, touched, submitError, dirtySinceLastSubmit }, ...rest } = props;
+  const submissionError = !dirtySinceLastSubmit && submitError;
+  const errorText = error || submissionError;
   return (
-    <NumberInput help={touched && error} validateStatus={error && touched ? 'error' : ''} {...rest} {...input} />
+    <NumberInput
+      help={touched && errorText}
+      validateStatus={touched && errorText ? 'error' : ''}
+      {...rest}
+      {...input}
+    />
   );
 }
 

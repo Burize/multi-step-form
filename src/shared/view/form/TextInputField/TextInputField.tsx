@@ -8,9 +8,16 @@ import { GetProps } from 'shared/types/utils';
 type IProps = GetProps<typeof TextInput> & FieldRenderProps<HTMLInputElement>;
 
 function TextInputField(props: IProps) {
-  const { input, meta: { error, touched }, ...rest } = props;
+  const { input, meta: { error, touched, submitError, dirtySinceLastSubmit }, ...rest } = props;
+  const submissionError = !dirtySinceLastSubmit && submitError;
+  const errorText = error || submissionError;
   return (
-    <TextInput help={touched && error} validateStatus={error && touched ? 'error' : ''} {...rest} {...input} />
+    <TextInput
+      help={touched && errorText}
+      validateStatus={touched && errorText ? 'error' : ''}
+      {...rest}
+      {...input}
+    />
   );
 }
 

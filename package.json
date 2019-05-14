@@ -4,7 +4,16 @@
   "main": "index.tsx",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --env.env=dev"
+    "dev": "better-npm-run watch:dev"
+  },
+  "betterScripts": {
+    "watch:dev": {
+      "command": "webpack-dev-server",
+      "env": {
+        "NODE_ENV": "dev",
+        "API_URL": "http://localhost:3030/"
+      }
+    }
   },
   "dependencies": {
     "@types/antd": "^1.0.0",
@@ -13,9 +22,11 @@
     "@types/node": "^11.13.8",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.8",
     "@types/react-router-dom": "^4.3.2",
     "antd": "^3.16.3",
     "awesome-typescript-loader": "^5.2.1",
+    "axios": "^0.18.0",
     "bem-cn": "^3.0.1",
     "classnames": "^2.2.6",
     "decko": "^1.2.0",
@@ -27,14 +38,18 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-final-form": "^4.1.0",
+    "react-redux": "^7.0.3",
     "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "sass-loader": "^7.1.0",
     "ts-loader": "^5.4.4",
     "tslint": "^5.16.0",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-loader": "^3.5.4",
     "tslint-react": "^4.0.0",
-    "typescript": "^3.4.4"
+    "typescript": "^3.4.4",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -45,6 +60,7 @@
     "autoprefixer": "^9.5.1",
     "babel-loader": "^8.0.5",
     "babel-plugin-import": "^1.11.0",
+    "better-npm-run": "^0.1.1",
     "css-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.9.0",
@@ -53,6 +69,7 @@
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^5.3.0",
+    "redux-devtools-extension": "^2.13.8",
     "style-loader": "^0.23.1",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
