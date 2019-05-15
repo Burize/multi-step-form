@@ -11,7 +11,7 @@ import {
 import { isRequired, validateEmail } from 'shared/helpers/forms/validations';
 import { DomainServerError } from 'shared/helpers/error/types';
 import { IAppReduxState, ICommunication } from 'shared/types/redux';
-import { Spinner, Message } from 'shared/view/elements';
+import { Spinner, Message, Notification } from 'shared/view/elements';
 import { DriveType } from 'shared/types/models/domain';
 
 import { ConfigurationForm, Overview } from '../../components';
@@ -25,6 +25,7 @@ import { normalizePhone, leasePeriodFormatter } from '../../../helpers';
 import { selectors, actions } from '../../../redux';
 
 import './DomainConfiguration.scss';
+import { isCommunicationFailed } from 'shared/helpers/redux';
 
 const b = block('domain-configuration');
 
@@ -62,17 +63,26 @@ class DomainConfiguration extends React.PureComponent<IProps> {
   public componentDidUpdate(prevProps: IProps) {
     const nextProps = this.props;
 
+    if (isCommunicationFailed(prevProps.loadingCountries, nextProps.loadingCountries)) {
+      const args = {
+        message: 'There is error when load resources.',
+        description:
+          'Probably, you will not launch back-end server. More information at readme.',
+        duration: 0,
+      };
+      Notification.open(args);
+    }
+
     if (this.completeSubmission && prevProps.creatingDomain.isRequesting && !nextProps.creatingDomain.isRequesting) {
 
       if (!nextProps.creatingDomain.error) {
         this.completeSubmission();
         Message.success('Domain has registered!', 5);
-
         return;
       }
       const error = serverErrors[nextProps.creatingDomain.error as DomainServerError];
       this.completeSubmission(error || unknownError);
-      Message.error('There are some error ...', 5);
+      Message.error(error ? 'There are some errors at specified data ...' : 'There is internal error at server ...', 5);
     }
   }
   public render() {

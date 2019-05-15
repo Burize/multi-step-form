@@ -51,7 +51,7 @@ export const leasePeriodLimitation = {
 };
 
 export const initialValues: IFormData = {
-  domain: '',
+  domain: 'your.domain',
   postfix: 'com',
   country: 'ru',
   additionalInfo: '',

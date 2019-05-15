@@ -9,6 +9,7 @@ const { store } = configureStore();
 import './App.scss';
 
 import * as modules from 'modules';
+import { defaultRoute } from 'modules/routes';
 
 const App = () => {
   return (
@@ -16,7 +17,7 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           {Object.values(modules).map(module => module.getRoutes())}
-          <Redirect to={'/order'} />
+          <Redirect to={defaultRoute} />
         </Switch>
       </BrowserRouter>
     </Provider>

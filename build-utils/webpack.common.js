@@ -1,8 +1,8 @@
 const commonPaths = require('./common-paths');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const webpack = require('webpack');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const envs = Object.entries(process.env).reduce(
 (acc, [name, value]) => ({ ...acc, [`process.env.${name}`]: JSON.stringify(value) }), {},
@@ -60,6 +60,18 @@ const config = {
               sourceMap: true,
             },
           },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => {
+                return [
+                  autoprefixer({
+                    browsers: ['last 2 versions'],
+                  }),
+                ];
+              },
+            },
+          },
         ],
       },
       {
@@ -91,7 +103,11 @@ const config = {
     new webpack.DefinePlugin({
         ...envs,
       }),
-  ]
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ru|en/),
+
+  ].concat(process.env.WITH_ANALYZE_MODE ? ([
+    new BundleAnalyzerPlugin(),
+  ]) : [])
 };
 
 module.exports = config;

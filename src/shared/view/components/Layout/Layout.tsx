@@ -12,9 +12,9 @@ class Layout extends React.PureComponent {
     const { children } = this.props;
     return (
       <ALayout>
-        <Header>Header</Header>
+        <Header />
         <Content className={b('content').toString()}>{children}</Content>
-        <Footer>Footer</Footer>
+        <Footer />
       </ALayout>
     );
   }

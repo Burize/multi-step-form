@@ -3,6 +3,7 @@ export { default as Button } from 'antd/lib/button';
 export { default as Icon } from 'antd/lib/icon';
 export { default as Spinner } from 'antd/lib/spin';
 export { default as Message } from 'antd/lib/message';
+export { default as Notification } from 'antd/lib/notification';
 
 export { default as TextInput } from './TextInput/TextInput';
 export { default as NumberInput } from './NumberInput/NumberInput';
