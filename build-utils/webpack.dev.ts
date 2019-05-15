@@ -1,16 +1,14 @@
-const commonPaths = require('./common-paths');
+import * as commonPaths from './common-paths';
 
-const webpack = require('webpack');
+import * as webpack from 'webpack';
 
-const port = process.env.PORT || 3000;
-
-const config = {
+const config: webpack.Configuration & { devServer: any } = { // devServer is not exist at webpack.Configuration
   mode: 'development',
   entry: {
-    app: `${commonPaths.appEntry}/index.tsx`
+    app: `${commonPaths.appEntry}/index.tsx`,
   },
   output: {
-    filename: '[name].[hash].js'
+    filename: '[name].[hash].js',
   },
   devtool: 'inline-source-map',
   module: {
@@ -19,28 +17,28 @@ const config = {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
             options: {
               modules: true,
               camelCase: true,
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     host: 'localhost',
-    port: port,
+    port: 3000,
     historyApiFallback: true,
     hot: true,
-    open: true
-  }
+    open: true,
+  },
 };
 
-module.exports = config;
+export default config;

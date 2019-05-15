@@ -6,6 +6,10 @@ import { Api } from 'services/api';
 import { reduxEntry as createDomainReduxEntry } from 'features/createDomain';
 import { IAppReduxState, IDependencies } from 'shared/types/redux';
 
+import getEnvParams from 'shared/helpers/getEnvParams';
+
+const { env } = getEnvParams();
+
 interface IStoreData {
   store: Store<IAppReduxState>;
 }
@@ -16,7 +20,7 @@ function configureStore(): IStoreData {
 
   const middlewares: Middleware[] = [thunk.withExtraArgument(dependencies)];
 
-  const composeEnhancers = process.env.NODE_ENV === 'dev' ? composeWithDevTools({}) : compose;
+  const composeEnhancers = env === 'development' ? composeWithDevTools({}) : compose;
 
   const entriesReducers: Record<keyof IAppReduxState, Reducer> = {
     createDomain: createDomainReduxEntry.reducer,
