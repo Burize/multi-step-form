@@ -2,6 +2,7 @@ import * as commonPaths from './common-paths';
 import * as webpack from 'webpack';
 import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import * as FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import * as autoprefixer from 'autoprefixer';
 
@@ -97,7 +98,6 @@ const config: webpack.Configuration = {
   plugins: [
     new HtmlWebpackPlugin({
       template: `public/index.html`,
-      favicon: `public/favicon.ico`,
     }),
     new ForkTsCheckerWebpackPlugin({
       tsconfig: commonPaths.tsconfig,
@@ -107,6 +107,7 @@ const config: webpack.Configuration = {
       ...envs,
     }),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ru|en/),
+    new FaviconsWebpackPlugin(commonPaths.faviconPath),
 
   ].concat(Boolean(withAnalyze) ? ([
     new BundleAnalyzerPlugin(),
