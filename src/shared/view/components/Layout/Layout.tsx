@@ -8,11 +8,12 @@ const { Header, Footer, Content } = ALayout;
 import './Layout.scss';
 
 const b = block('layout');
+
 class Layout extends React.PureComponent {
   public render() {
     const { children } = this.props;
     return (
-      <ALayout>
+      <ALayout className={b()}>
         <Header />
         <Content className={b('content').toString()}>{children}</Content>
         <Footer />

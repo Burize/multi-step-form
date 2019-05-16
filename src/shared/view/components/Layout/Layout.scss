@@ -1,5 +1,6 @@
 .layout {
-  // align-items: center
+  min-width: 800px;
+  min-height: 100% !important;
 
   &__content {
     align-self: center;

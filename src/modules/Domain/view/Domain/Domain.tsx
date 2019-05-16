@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
+
 import { DomainConfiguration } from 'features/createDomain';
 import { Layout } from 'shared/view';
 
-const b = block('block-name');
+const b = block('Domain');
 
 class Domain extends React.PureComponent {
   public render() {
