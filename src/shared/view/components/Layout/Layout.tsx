@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 import ALayout from 'antd/lib/layout';
+import 'antd/lib/layout/style/index.less';
 
 const { Header, Footer, Content } = ALayout;
 

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import ASelect, { SelectProps } from 'antd/lib/select';
+import 'antd/lib/select/style/index.less';
+
 import withAntdFormItem from 'shared/helpers/forms/antdFormItem';
 
 const Option = ASelect.Option;

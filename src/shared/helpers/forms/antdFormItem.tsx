@@ -1,5 +1,7 @@
 import * as React from 'react';
 import Form, { FormItemProps } from 'antd/lib/Form';
+import 'antd/lib/Form/style/index.less';
+
 
 function withAntdFormItem<IOwnProps>(Component: React.ComponentType<IOwnProps>) {
 
